@@ -1,53 +1,25 @@
-import { Container, FooterSection, Links, Link, SectionTitle } from './styles'
+import logo from '../../assets/images/logo.png'
+import { SocialLinks } from '../../utils/list'
 
-const currentYear = new Date().getFullYear()
+import { FooterContainer, Logo, SocialIcons, Text } from './styles'
 
 const Footer = () => (
-  <Container>
-    <div className="container">
-      <FooterSection>
-        <SectionTitle>Categorias</SectionTitle>
-        <Links>
-          <li>
-            <Link>Ficção</Link>
-          </li>
-          <li>
-            <Link>Suspense</Link>
-          </li>
-          <li>
-            <Link>Aventura</Link>
-          </li>
-          <li>
-            <Link>Romance</Link>
-          </li>
-          <li>
-            <Link>Fantasia</Link>
-          </li>
-          <li>
-            <Link>Não-Ficção</Link>
-          </li>
-          <li>
-            <Link>Infanto-Juvenil</Link>
-          </li>
-        </Links>
-      </FooterSection>
-      <FooterSection>
-        <SectionTitle>Acesso rápido</SectionTitle>
-        <Links>
-          <li>
-            <Link>Novidades</Link>
-          </li>
-          <li>
-            <Link>Promoções</Link>
-          </li>
-          <li>
-            <Link>Em breve</Link>
-          </li>
-        </Links>
-      </FooterSection>
-      <p>{currentYear} - &copy; The Bookstore Todos os direitos reservados</p>
-    </div>
-  </Container>
+  <FooterContainer>
+    <Logo>
+      <img src={logo} alt="efood" />
+    </Logo>
+    <SocialIcons>
+      {SocialLinks.map((item) => (
+        <img src={item.icon} alt={item.title} key={item.id} />
+      ))}
+    </SocialIcons>
+
+    <Text>
+      A efood é uma plataforma para divulgação de estabelecimentos, a
+      responsabilidade pela entrega, qualidade dos produtos é toda do
+      estabelecimento contratado.
+    </Text>
+  </FooterContainer>
 )
 
 export default Footer

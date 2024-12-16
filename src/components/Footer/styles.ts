@@ -1,29 +1,37 @@
 import styled from 'styled-components'
-import { cores } from '../../styles'
+import { cores } from '../../styles/GlobalStyles'
 
-export const Container = styled.footer`
-  background-color: ${cores.cinza};
-  padding: 32px 0;
-  font-size: 14px;
-`
-
-export const SectionTitle = styled.h4`
-  color: ${cores.branca};
-  font-size: 16px;
-  font-weight: bold;
-`
-
-export const Links = styled.ul`
+export const FooterContainer = styled.footer`
+  width: 100%;
+  padding: 40px 0;
   display: flex;
-  margin-top: 16px;
+  flex-direction: column;
+  justify-content: center;
+  background: ${cores.begeEscuro};
 `
 
-export const Link = styled.a`
-  color: ${cores.cinzaClaro};
-  text-decoration: none;
-  margin-right: 8px;
+export const Logo = styled.div`
+  max-width: 125px;
+  margin: 0 auto;
 `
 
-export const FooterSection = styled.div`
-  margin-bottom: 64px;
+export const SocialIcons = styled.div`
+  display: flex;
+  gap: 8px;
+  margin: 32px auto 80px;
+
+  img {
+    width: 24px;
+    height: 24px;
+  }
+`
+
+export const Text = styled.p`
+  margin: 0 auto;
+  color: ${cores.salmao};
+  font-size: 10px;
+  text-align: center;
+  font-weight: 400;
+  line-height: normal;
+  max-width: 480px;
 `

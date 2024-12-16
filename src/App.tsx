@@ -1,20 +1,28 @@
 import { BrowserRouter } from 'react-router-dom'
-
-import Header from './components/Header'
-import { GlobalCss } from './styles'
-
+import { useSelector, useDispatch } from 'react-redux'
+import { GlobalCss } from './styles/GlobalStyles'
 import Rotas from './routes'
-import Footer from './components/Footer'
+import CartPopup from './components/Cart'
+import { RootState } from './store'
+import { toggleCartVisibility } from './store/cart'
 
 function App() {
+  const isCartVisible = useSelector(
+    (state: RootState) => state.cart.isCartVisible
+  )
+  const dispatch = useDispatch()
+
+  const handleCartToggle = () => {
+    dispatch(toggleCartVisibility())
+  }
+
   return (
     <BrowserRouter>
       <GlobalCss />
       <div className="container">
-        <Header />
+        <Rotas />
+        {isCartVisible && <CartPopup fecharCarrinho={handleCartToggle} />}
       </div>
-      <Rotas />
-      <Footer />
     </BrowserRouter>
   )
 }
