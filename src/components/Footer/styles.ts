@@ -8,9 +8,10 @@ export const FooterContainer = styled.footer`
   flex-direction: column;
   justify-content: center;
   background: ${cores.begeEscuro};
+  margin-top: 120px;
 `
 
-export const Logo = styled.div`
+export const LogoWrapper = styled.div`
   max-width: 125px;
   margin: 0 auto;
 `

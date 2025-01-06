@@ -1,13 +1,14 @@
-import logo from '../../assets/images/logo.png'
 import { SocialLinks } from '../../utils/list'
 
-import { FooterContainer, Logo, SocialIcons, Text } from './styles'
+import Logo from '../Logo'
+
+import { FooterContainer, SocialIcons, Text, LogoWrapper } from './styles'
 
 const Footer = () => (
   <FooterContainer>
-    <Logo>
-      <img src={logo} alt="efood" />
-    </Logo>
+    <LogoWrapper>
+      <Logo />
+    </LogoWrapper>
     <SocialIcons>
       {SocialLinks.map((item) => (
         <img src={item.icon} alt={item.title} key={item.id} />

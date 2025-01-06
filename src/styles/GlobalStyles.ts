@@ -21,13 +21,14 @@ export const GlobalCss = createGlobalStyle`
   }
 `
 
-export const Container = styled.div`
+export const GlobalContainer = styled.div`
   margin: 0 auto;
-  padding-top: 40px;
-  padding-bottom: 120px;
   max-width: 1024px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  width: 100%;
 `
+// padding-top: 40px;
+// padding-bottom: 120px;
+// display: flex;
+// flex-direction: column;
+// align-items: center;
+// justify-content: center;

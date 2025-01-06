@@ -53,7 +53,11 @@ const ProductCard = ({
     <>
       <Card>
         <div onClick={openModal} style={{ cursor: 'pointer' }}>
-          <img src={image} alt={title} />
+          <img
+            src={image}
+            alt={title}
+            onError={(e) => (e.currentTarget.src = '/default-image.jpg')}
+          />
         </div>
         <Info>
           <Titulo>{title}</Titulo>
@@ -69,7 +73,11 @@ const ProductCard = ({
               <img src={close} alt="close" />
             </CloseButton>
             <ModalImage>
-              <img src={image} alt={title} />
+              <img
+                src={image}
+                alt={title}
+                onError={(e) => (e.currentTarget.src = '/default-image.jpg')}
+              />
             </ModalImage>
             <ModalInfo>
               <h2>{title}</h2>

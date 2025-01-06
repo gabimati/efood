@@ -1,32 +1,37 @@
 import styled from 'styled-components'
 import { cores } from '../../styles/GlobalStyles'
 
-export const Container = styled.div`
-  padding: 40px 170px;
-  display: flex;
-  justify-content: space-between;
-`
-export const BannerContainer = styled.div`
+export const BannerImage = styled.div`
   width: 100%;
   height: 280px;
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
+  position: relative; /* Adiciona um contexto de posicionamento para elementos filhos */
   background-color: rgba(0, 0, 0, 0.4); /* Cor de sobreposição */
   background-blend-mode: darken;
+`
 
-  .container {
-    height: 100%;
-    color: ${cores.branca};
-    flex-direction: column;
-    font-size: 32px;
-  }
+export const BannerContainer = styled.div`
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  padding-top: 24px;
+  padding-bottom: 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+  font-size: 30px;
+  color: ${cores.branca};
 
   h3 {
     font-weight: 100;
+    margin: 0;
   }
 
   h2 {
     font-weight: bold;
+    margin: 0;
   }
 `

@@ -1,27 +1,27 @@
-import Product from '../../models/Product'
+import { Product } from '../../types'
 import { List } from './styles'
-import { Container } from '../../styles/GlobalStyles'
+import { GlobalContainer } from '../../styles/GlobalStyles'
 import ProductCard from '../ProductCard'
 
-export type Props = {
+type Props = {
   products: Product[]
 }
 
 const ProductList = ({ products }: Props) => (
-  <Container>
+  <GlobalContainer>
     <List>
       {products.map((product) => (
         <ProductCard
           key={product.id}
-          image={product.image}
-          title={product.title}
-          shortDescription={product.shortDescription}
-          description={product.description}
-          price={product.price}
+          image={product.foto}
+          title={product.nome}
+          shortDescription={product.porcao}
+          description={product.descricao}
+          price={product.preco}
         />
       ))}
     </List>
-  </Container>
+  </GlobalContainer>
 )
 
 export default ProductList
