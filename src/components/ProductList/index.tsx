@@ -1,7 +1,8 @@
 import { Product } from '../../types'
-import { List } from './styles'
 import { GlobalContainer } from '../../styles/GlobalStyles'
 import ProductCard from '../ProductCard'
+
+import { List } from './styles'
 
 type Props = {
   products: Product[]
@@ -15,8 +16,8 @@ const ProductList = ({ products }: Props) => (
           key={product.id}
           image={product.foto}
           title={product.nome}
-          shortDescription={product.porcao}
           description={product.descricao}
+          portion={product.porcao}
           price={product.preco}
         />
       ))}

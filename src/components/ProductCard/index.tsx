@@ -1,5 +1,8 @@
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
+import { addItem } from '../../store/cart'
+import close from '../../assets/icons/close.png'
+
 import {
   Card,
   Titulo,
@@ -13,24 +16,16 @@ import {
   CloseButton,
   Button
 } from './styles'
-import { addItem } from '../../store/cart'
-import close from '../../assets/icons/close.png'
 
 type Props = {
   image: string
   title: string
-  shortDescription: string
   description: string
+  portion: string
   price: number
 }
 
-const ProductCard = ({
-  image,
-  title,
-  shortDescription,
-  description,
-  price
-}: Props) => {
+const ProductCard = ({ image, title, description, portion, price }: Props) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const dispatch = useDispatch()
 
@@ -62,7 +57,7 @@ const ProductCard = ({
         <Info>
           <Titulo>{title}</Titulo>
         </Info>
-        <Descricao>{shortDescription}</Descricao>
+        <Descricao>{description}</Descricao>
         <Botao onClick={handleAddToCart}>Adicionar ao carrinho</Botao>
       </Card>
 
@@ -82,6 +77,10 @@ const ProductCard = ({
             <ModalInfo>
               <h2>{title}</h2>
               <p>{description}</p>
+              <br />
+              <p>
+                <strong>Porção:</strong> {portion}
+              </p>
               <Button onClick={handleAddToCart}>
                 Adicionar ao carrinho - R$ {price.toFixed(2)}
               </Button>

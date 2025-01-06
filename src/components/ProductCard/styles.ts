@@ -1,8 +1,10 @@
 import styled from 'styled-components'
+
 import { cores } from '../../styles/GlobalStyles'
 
 export const Card = styled.div`
   width: 100%;
+  max-height: 348px;
   color: ${cores.begeEscuro};
   position: relative;
   background-color: ${cores.salmao};
@@ -21,16 +23,22 @@ export const Info = styled.div`
 `
 
 export const Titulo = styled.h3`
-  font-size: 18px;
-  padding-top: 8px;
+  font-size: 16px;
+  padding: 8px 0;
   font-weight: bold;
 `
 
 export const Descricao = styled.p`
   font-size: 14px;
   display: block;
-  padding: 16px 0;
   line-height: 22px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 4; /* Limitar o texto a 4 linhas */
+  -webkit-box-orient: vertical;
+  flex-grow: 1; /* O texto ocupa o espaço disponível */
+  margin-bottom: 8px; /* Espaço antes do botão */
 `
 
 export const Botao = styled.button`
@@ -44,6 +52,7 @@ export const Botao = styled.button`
   border: none;
   padding: 4px;
   cursor: pointer;
+  margin-top: auto;
 `
 
 export const ModalOverlay = styled.div`
