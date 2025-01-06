@@ -40,7 +40,7 @@ const ProductCard = ({
   const handleAddToCart = () => {
     dispatch(
       addItem({
-        id: Math.random(), // ou utilize um id único do produto
+        id: Math.random(),
         image,
         title,
         price,

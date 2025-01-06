@@ -17,7 +17,7 @@ type Props = {
   image: string
   title: string
   description: string
-  category: string | string[] // Pode ser string ou array
+  category: string | string[]
   avaliation: string
 }
 
@@ -29,7 +29,6 @@ const RestaurantCard = ({
   category,
   avaliation
 }: Props) => {
-  // Certifique-se de que category seja um array
   const categories = Array.isArray(category) ? category : [category]
 
   return (

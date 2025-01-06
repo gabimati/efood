@@ -4,13 +4,13 @@ import { Link } from 'react-router-dom'
 
 export const HeaderProfile = styled.header`
   width: 100%;
-  height: 162px; /* Mantém a altura original */
+  height: 162px;
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
   display: flex;
   align-items: center;
-  position: relative; /* Adiciona o contexto de posicionamento para elementos internos */
+  position: relative;
 `
 
 export const HeaderContainer = styled.div`
@@ -22,7 +22,7 @@ export const HeaderContainer = styled.div`
 
 export const LogoWrapper = styled.div`
   position: absolute;
-  top: 40px; /* Ajusta a distância da logo para 40px do topo da página */
+  top: 40px;
   left: 50%;
   transform: translateX(-50%);
 `

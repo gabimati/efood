@@ -1,18 +1,18 @@
 export interface Product {
   id: number
-  foto: string // URL da imagem do produto
-  nome: string // Nome do produto
-  descricao: string // Descrição completa do produto
-  porcao: string // Informação sobre a porção
-  preco: number // Preço do produto
+  foto: string
+  nome: string
+  descricao: string
+  porcao: string
+  preco: number
 }
 
 export interface Restaurant {
   id: number
-  titulo: string // Nome do restaurante
-  tipo: string // Tipo de culinária
-  avaliacoes: number // Avaliação do restaurante
-  descricao: string // Descrição do restaurante
-  capa: string // URL da imagem de capa do restaurante
-  cardapio: Product[] // Lista de produtos do restaurante
+  titulo: string
+  tipo: string
+  avaliacoes: number
+  descricao: string
+  capa: string
+  cardapio: Product[]
 }

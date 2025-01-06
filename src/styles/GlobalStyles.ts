@@ -26,9 +26,3 @@ export const GlobalContainer = styled.div`
   max-width: 1024px;
   width: 100%;
 `
-// padding-top: 40px;
-// padding-bottom: 120px;
-// display: flex;
-// flex-direction: column;
-// align-items: center;
-// justify-content: center;

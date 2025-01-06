@@ -7,8 +7,8 @@ export const BannerImage = styled.div`
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
-  position: relative; /* Adiciona um contexto de posicionamento para elementos filhos */
-  background-color: rgba(0, 0, 0, 0.4); /* Cor de sobreposição */
+  position: relative;
+  background-color: rgba(0, 0, 0, 0.4);
   background-blend-mode: darken;
 `
 
