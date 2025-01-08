@@ -124,10 +124,15 @@ export const FormGroup = styled.div`
     width: 100%;
     padding: 8px;
     font-size: 14px;
-    border: none;
+    border: 2px solid transparent;
     background-color: ${cores.begeEscuro};
     color: #4b4b4b;
     font-weight: bold;
+    transition: border-color 0.3s ease;
+
+    &.has-error {
+      border-color: red;
+    }
   }
 `
 

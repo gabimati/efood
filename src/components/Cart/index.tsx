@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import InputMask from 'react-input-mask'
 import { RootState } from '../../store'
 import { clearCart, removeItem } from '../../store/cart'
 import {
@@ -14,6 +15,52 @@ import {
   Overlay
 } from './styles'
 
+type FieldName =
+  | 'nome'
+  | 'endereco'
+  | 'cidade'
+  | 'cep'
+  | 'numero'
+  | 'complemento'
+  | 'cardName'
+  | 'cardNumber'
+  | 'cardCvv'
+  | 'cardMonthExpiry'
+  | 'cardYearExpiry'
+
+type FormData = {
+  [key in FieldName]: string
+}
+
+type ErrorState = {
+  [key in FieldName]: boolean
+}
+
+const validateField = (name: FieldName, value: string): boolean => {
+  switch (name) {
+    case 'nome':
+    case 'endereco':
+    case 'cidade':
+      return value.trim().length >= 3
+    case 'cep':
+      return /^\d{5}-\d{3}$/.test(value)
+    case 'numero':
+      return value.trim().length > 0
+    case 'cardName':
+      return value.trim().length >= 5
+    case 'cardNumber':
+      return /^\d{4} \d{4} \d{4} \d{4}$/.test(value)
+    case 'cardCvv':
+      return /^\d{3}$/.test(value)
+    case 'cardMonthExpiry':
+      return /^(0[1-9]|1[0-2])$/.test(value)
+    case 'cardYearExpiry':
+      return /^\d{2}$/.test(value)
+    default:
+      return true
+  }
+}
+
 type Props = {
   fecharCarrinho: () => void
 }
@@ -27,14 +74,41 @@ const CartPopup = ({ fecharCarrinho }: Props) => {
 
   const total = cartItems.reduce((acc, item) => acc + item.price, 0)
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     nome: '',
     endereco: '',
     cidade: '',
     cep: '',
     numero: '',
-    complemento: ''
+    complemento: '',
+    cardName: '',
+    cardNumber: '',
+    cardCvv: '',
+    cardMonthExpiry: '',
+    cardYearExpiry: ''
   })
+
+  const [errors, setErrors] = useState<ErrorState>({
+    nome: false,
+    endereco: false,
+    cidade: false,
+    cep: false,
+    numero: false,
+    complemento: false,
+    cardName: false,
+    cardNumber: false,
+    cardCvv: false,
+    cardMonthExpiry: false,
+    cardYearExpiry: false
+  })
+
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+    setErrors((prev) => ({
+      ...prev,
+      [name]: !validateField(name as FieldName, value)
+    }))
+  }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -47,6 +121,21 @@ const CartPopup = ({ fecharCarrinho }: Props) => {
   const handleConfirmOrder = () => {
     setCurrentStep('confirmation')
     dispatch(clearCart())
+  }
+
+  const isFormValid = (fields: FieldName[]): boolean => {
+    const validationErrors = fields.reduce(
+      (acc: Partial<ErrorState>, field) => {
+        acc[field] = !validateField(field, formData[field])
+        return acc
+      },
+      {}
+    )
+    setErrors((prev) => ({
+      ...prev,
+      ...validationErrors
+    }))
+    return !Object.values(validationErrors).some((error) => error)
   }
 
   return (
@@ -106,7 +195,9 @@ const CartPopup = ({ fecharCarrinho }: Props) => {
                 name="nome"
                 value={formData.nome}
                 onChange={handleChange}
+                onBlur={handleBlur}
                 required
+                className={errors.nome ? 'has-error' : ''}
               />
             </FormGroup>
             <FormGroup>
@@ -117,7 +208,9 @@ const CartPopup = ({ fecharCarrinho }: Props) => {
                 name="endereco"
                 value={formData.endereco}
                 onChange={handleChange}
+                onBlur={handleBlur}
                 required
+                className={errors.endereco ? 'has-error' : ''}
               />
             </FormGroup>
             <FormGroup>
@@ -128,19 +221,23 @@ const CartPopup = ({ fecharCarrinho }: Props) => {
                 name="cidade"
                 value={formData.cidade}
                 onChange={handleChange}
+                onBlur={handleBlur}
                 required
+                className={errors.cidade ? 'has-error' : ''}
               />
             </FormGroup>
             <Row>
               <FormGroup>
                 <label htmlFor="cep">CEP</label>
-                <input
-                  type="text"
+                <InputMask
+                  mask="99999-999"
                   id="cep"
                   name="cep"
                   value={formData.cep}
                   onChange={handleChange}
+                  onBlur={handleBlur}
                   required
+                  className={errors.cep ? 'has-error' : ''}
                 />
               </FormGroup>
               <FormGroup>
@@ -151,23 +248,31 @@ const CartPopup = ({ fecharCarrinho }: Props) => {
                   name="numero"
                   value={formData.numero}
                   onChange={handleChange}
+                  onBlur={handleBlur}
                   required
+                  className={errors.numero ? 'has-error' : ''}
                 />
               </FormGroup>
             </Row>
             <FormGroup>
-              <label htmlFor="telefone">Complemento</label>
+              <label htmlFor="complemento">Complemento</label>
               <input
                 type="text"
-                id="telefone"
-                name="telefone"
+                id="complemento"
+                name="complemento"
                 value={formData.complemento}
                 onChange={handleChange}
-                required
               />
             </FormGroup>
             <CartFooter>
-              <button onClick={() => setCurrentStep('payment')}>
+              <button
+                onClick={() => {
+                  if (
+                    isFormValid(['nome', 'endereco', 'cidade', 'cep', 'numero'])
+                  )
+                    setCurrentStep('payment')
+                }}
+              >
                 Continuar com o pagamento
               </button>
               <button onClick={() => setCurrentStep('cart')}>
@@ -180,46 +285,91 @@ const CartPopup = ({ fecharCarrinho }: Props) => {
         {currentStep === 'payment' && (
           <CartBody>
             <FormGroup>
-              <label htmlFor="card-name">Nome no Cartão</label>
-              <input type="text" id="card-name" name="card-name" required />
+              <label htmlFor="cardName">Nome no Cartão</label>
+              <input
+                type="text"
+                id="cardName"
+                name="cardName"
+                value={formData.cardName}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                required
+                className={errors.cardName ? 'has-error' : ''}
+              />
             </FormGroup>
             <Row>
               <FormGroup>
-                <label htmlFor="card-number">Número do Cartão</label>
-                <input
-                  type="text"
-                  id="card-number"
-                  name="card-number"
+                <label htmlFor="cardNumber">Número do Cartão</label>
+                <InputMask
+                  mask="9999 9999 9999 9999"
+                  id="cardNumber"
+                  name="cardNumber"
+                  value={formData.cardNumber}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
                   required
+                  className={errors.cardNumber ? 'has-error' : ''}
                 />
               </FormGroup>
               <FormGroup>
-                <label htmlFor="card-cvv">CVV</label>
-                <input type="text" id="card-cvv" name="card-cvv" required />
+                <label htmlFor="cardCvv">CVV</label>
+                <InputMask
+                  mask="999"
+                  id="cardCvv"
+                  name="cardCvv"
+                  value={formData.cardCvv}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  required
+                  className={errors.cardCvv ? 'has-error' : ''}
+                />
               </FormGroup>
             </Row>
             <Row>
               <FormGroup>
-                <label htmlFor="card-expiry">Mês de vencimento</label>
-                <input
-                  type="text"
-                  id="card-month-expiry"
-                  name="card-month-expiry"
+                <label htmlFor="cardMonthExpiry">Mês de vencimento</label>
+                <InputMask
+                  mask="99"
+                  id="cardMonthExpiry"
+                  name="cardMonthExpiry"
+                  value={formData.cardMonthExpiry}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
                   required
+                  className={errors.cardMonthExpiry ? 'has-error' : ''}
                 />
               </FormGroup>
               <FormGroup>
-                <label htmlFor="card-expiry">Ano de vencimento</label>
-                <input
-                  type="text"
-                  id="card-year-expiry"
-                  name="card-year-expiry"
+                <label htmlFor="cardYearExpiry">Ano de vencimento</label>
+                <InputMask
+                  mask="99"
+                  id="cardYearExpiry"
+                  name="cardYearExpiry"
+                  value={formData.cardYearExpiry}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
                   required
+                  className={errors.cardYearExpiry ? 'has-error' : ''}
                 />
               </FormGroup>
             </Row>
             <CartFooter>
-              <button onClick={handleConfirmOrder}>Finalizar pagamento</button>
+              <button
+                onClick={() => {
+                  if (
+                    isFormValid([
+                      'cardName',
+                      'cardNumber',
+                      'cardCvv',
+                      'cardMonthExpiry',
+                      'cardYearExpiry'
+                    ])
+                  )
+                    handleConfirmOrder()
+                }}
+              >
+                Finalizar pagamento
+              </button>
               <button onClick={() => setCurrentStep('delivery')}>
                 Voltar para edição de endereço
               </button>
