@@ -1,16 +1,9 @@
 import { Link } from 'react-router-dom'
+
 import Tag from '../Tag'
 import star from '../../assets/icons/star.png'
-import {
-  Card,
-  TituloAvaliacao,
-  Descricao,
-  Categoria,
-  Info,
-  Botao,
-  Container,
-  ImgContainer
-} from './styles'
+
+import * as S from './styles'
 
 type Props = {
   id: number
@@ -32,31 +25,31 @@ const RestaurantCard = ({
   const categories = Array.isArray(category) ? category : [category]
 
   return (
-    <Card>
-      <ImgContainer>
+    <S.Card>
+      <S.ImgContainer>
         <Link to={`/restaurant/${id}`}>
           <img src={image} alt={title} />
         </Link>
-      </ImgContainer>
-      <Container>
-        <Categoria>
+      </S.ImgContainer>
+      <S.Container>
+        <S.Category>
           {categories.map((cat) => (
             <Tag key={cat}>{cat}</Tag>
           ))}
-        </Categoria>
-        <Info>
-          <TituloAvaliacao>{title}</TituloAvaliacao>
-          <TituloAvaliacao>
+        </S.Category>
+        <S.Info>
+          <S.AvaliationTitle>{title}</S.AvaliationTitle>
+          <S.AvaliationTitle>
             {avaliation}
             <img src={star} alt="estrela" />
-          </TituloAvaliacao>
-        </Info>
-        <Descricao>{description}</Descricao>
+          </S.AvaliationTitle>
+        </S.Info>
+        <S.Description>{description}</S.Description>
         <Link to={`/restaurant/${id}`}>
-          <Botao>Ver Cardápio</Botao>
+          <S.Button>Ver Cardápio</S.Button>
         </Link>
-      </Container>
-    </Card>
+      </S.Container>
+    </S.Card>
   )
 }
 

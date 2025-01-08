@@ -1,5 +1,5 @@
 import { GlobalContainer } from '../../styles/GlobalStyles'
-import { BannerContainer, BannerImage } from './styles'
+import * as S from './styles'
 
 type Props = {
   backgroundImage: string
@@ -8,14 +8,14 @@ type Props = {
 }
 
 const Banner = ({ backgroundImage, category, title }: Props) => (
-  <BannerImage style={{ backgroundImage: `url(${backgroundImage})` }}>
+  <S.BannerImage style={{ backgroundImage: `url(${backgroundImage})` }}>
     <GlobalContainer>
-      <BannerContainer>
+      <S.BannerContainer>
         <h3>{category}</h3>
         <h2>{title}</h2>
-      </BannerContainer>
+      </S.BannerContainer>
     </GlobalContainer>
-  </BannerImage>
+  </S.BannerImage>
 )
 
 export default Banner

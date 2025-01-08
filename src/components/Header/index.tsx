@@ -1,26 +1,20 @@
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
 
-import bannerIMG from '../../assets/images/fundo.svg'
-
 import { RootState } from '../../store'
 import CartPopup from '../Cart'
 import Logo from '../Logo'
 
 import { GlobalContainer } from '../../styles/GlobalStyles'
-import {
-  StyledLink,
-  HeaderContainer,
-  HeaderProfile,
-  CartInfo,
-  LogoWrapper
-} from './styles'
+import * as S from './styles'
+
+import bannerIMG from '../../assets/images/fundo.svg'
 
 const Header = () => {
   const [isCartOpen, setIsCartOpen] = useState(false)
 
   const totalItems = useSelector((state: RootState) =>
-    state.cart.items.reduce((total, item) => total + item.quantity, 0)
+    state.cart.items.reduce((total, item) => total + item.portion, 0)
   )
 
   const toggleCart = () => {
@@ -29,21 +23,21 @@ const Header = () => {
 
   return (
     <>
-      <HeaderProfile style={{ backgroundImage: `url(${bannerIMG})` }}>
+      <S.HeaderProfile style={{ backgroundImage: `url(${bannerIMG})` }}>
         <GlobalContainer>
-          <HeaderContainer>
-            <StyledLink to="/">
-              <h3>Restaurantes</h3>
-            </StyledLink>
-            <LogoWrapper>
+          <S.HeaderContainer>
+            <S.LogoWrapper>
               <Logo />
-            </LogoWrapper>
-            <CartInfo onClick={toggleCart}>
+            </S.LogoWrapper>
+            <S.StyledLink to="/">
+              <h3>Restaurantes</h3>
+            </S.StyledLink>
+            <S.CartInfo onClick={toggleCart}>
               {totalItems} produto(s) no carrinho
-            </CartInfo>
-          </HeaderContainer>
+            </S.CartInfo>
+          </S.HeaderContainer>
         </GlobalContainer>
-      </HeaderProfile>
+      </S.HeaderProfile>
 
       {isCartOpen && <CartPopup fecharCarrinho={() => setIsCartOpen(false)} />}
     </>

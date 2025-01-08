@@ -2,7 +2,9 @@ import styled from 'styled-components'
 import { cores } from '../../styles/GlobalStyles'
 
 export const Card = styled.div`
-  width: 472px;
+  width: 100%;
+  max-width: 472px;
+  margin: 0 auto;
   color: ${cores.salmao};
   position: relative;
   border: solid 1px ${cores.salmao};
@@ -35,7 +37,7 @@ export const Info = styled.div`
   align-items: center;
 `
 
-export const TituloAvaliacao = styled.h3`
+export const AvaliationTitle = styled.h3`
   font-size: 18px;
   font-weight: bold;
 
@@ -44,14 +46,14 @@ export const TituloAvaliacao = styled.h3`
   }
 `
 
-export const Descricao = styled.p`
+export const Description = styled.p`
   font-size: 14px;
   display: block;
   padding: 16px 0;
   line-height: 22px;
 `
 
-export const Categoria = styled.div`
+export const Category = styled.div`
   position: absolute;
   top: 16px;
   right: 16px;
@@ -60,7 +62,7 @@ export const Categoria = styled.div`
   gap: 5px;
 `
 
-export const Botao = styled.button`
+export const Button = styled.button`
   background-color: ${cores.salmao};
   color: ${cores.bege};
   font-size: 14px;

@@ -1,10 +1,12 @@
 import { BrowserRouter } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import { GlobalCss } from './styles/GlobalStyles'
+
 import Rotas from './routes'
 import CartPopup from './components/Cart'
 import { RootState } from './store'
 import { toggleCartVisibility } from './store/cart'
+
+import { GlobalCss } from './styles/GlobalStyles'
 
 function App() {
   const isCartVisible = useSelector(

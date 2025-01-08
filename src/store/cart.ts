@@ -5,7 +5,7 @@ type CartItem = {
   image: string
   title: string
   price: number
-  quantity: number
+  portion: number
 }
 
 type CartState = {
@@ -25,7 +25,7 @@ const cartSlice = createSlice({
     addItem: (state, action: PayloadAction<CartItem>) => {
       const item = state.items.find((i) => i.id === action.payload.id)
       if (item) {
-        item.quantity += 1
+        item.portion += 1
       } else {
         state.items.push(action.payload)
       }
@@ -34,11 +34,11 @@ const cartSlice = createSlice({
     removeItem: (state, action: PayloadAction<number>) => {
       state.items = state.items.filter((item) => item.id !== action.payload)
     },
-    decreaseItemQuantity: (state, action: PayloadAction<number>) => {
+    decreaseItemportion: (state, action: PayloadAction<number>) => {
       const item = state.items.find((i) => i.id === action.payload)
       if (item) {
-        item.quantity -= 1
-        if (item.quantity === 0) {
+        item.portion -= 1
+        if (item.portion === 0) {
           state.items = state.items.filter((i) => i.id !== action.payload)
         }
       }
@@ -55,7 +55,7 @@ const cartSlice = createSlice({
 export const {
   addItem,
   removeItem,
-  decreaseItemQuantity,
+  decreaseItemportion,
   clearCart,
   toggleCartVisibility
 } = cartSlice.actions

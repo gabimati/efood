@@ -8,12 +8,16 @@ export const CartContainer = styled.div`
   width: 400px;
   height: 100%;
   padding: 8px;
-
   background-color: ${cores.salmao};
   z-index: 1000;
   display: flex;
   flex-direction: column;
   color: ${cores.begeEscuro};
+
+  @media (max-width: 768px) {
+    width: 100vw; /* Ocupa 100% da largura da viewport */
+    padding: 8px 16px; /* Ajusta o padding para melhor espaçamento */
+  }
 `
 
 export const CartHeader = styled.div`

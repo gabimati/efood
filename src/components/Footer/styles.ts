@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { cores } from '../../styles/GlobalStyles'
+import { breakpoints, cores } from '../../styles/GlobalStyles'
 
 export const FooterContainer = styled.footer`
   width: 100%;
@@ -9,6 +9,11 @@ export const FooterContainer = styled.footer`
   justify-content: center;
   background: ${cores.begeEscuro};
   margin-top: 120px;
+
+  @media (max-width: ${breakpoints.tablet}) {
+    padding: 20px 0;
+    text-align: center;
+  }
 `
 
 export const LogoWrapper = styled.div`

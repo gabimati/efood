@@ -1,7 +1,7 @@
-import { Product } from '../../types'
-import { GlobalContainer } from '../../styles/GlobalStyles'
 import ProductCard from '../ProductCard'
+import { Product } from '../../types'
 
+import { GlobalContainer } from '../../styles/GlobalStyles'
 import { List } from './styles'
 
 type Props = {

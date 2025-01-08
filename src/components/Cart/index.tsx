@@ -1,19 +1,12 @@
 import { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import InputMask from 'react-input-mask'
+
+import { usePurchaseMutation } from '../../service/api'
 import { RootState } from '../../store'
 import { clearCart, removeItem } from '../../store/cart'
-import {
-  CartContainer,
-  CartHeader,
-  CartBody,
-  CartFooter,
-  FormGroup,
-  CloseButton,
-  CartItemCard,
-  Row,
-  Overlay
-} from './styles'
+
+import * as S from './styles'
 
 type FieldName =
   | 'nome'
@@ -72,6 +65,7 @@ const CartPopup = ({ fecharCarrinho }: Props) => {
     'cart' | 'delivery' | 'payment' | 'confirmation'
   >('cart')
 
+  const [purchase, { isSuccess, data: purchaseData }] = usePurchaseMutation()
   const total = cartItems.reduce((acc, item) => acc + item.price, 0)
 
   const [formData, setFormData] = useState<FormData>({
@@ -102,6 +96,8 @@ const CartPopup = ({ fecharCarrinho }: Props) => {
     cardYearExpiry: false
   })
 
+  const [emptyCartError, setEmptyCartError] = useState(false)
+
   const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     setErrors((prev) => ({
@@ -118,9 +114,42 @@ const CartPopup = ({ fecharCarrinho }: Props) => {
     }))
   }
 
-  const handleConfirmOrder = () => {
-    setCurrentStep('confirmation')
-    dispatch(clearCart())
+  const handleConfirmOrder = async () => {
+    const orderPayload = {
+      products: cartItems.map((item) => ({
+        id: item.id,
+        price: item.price
+      })),
+      delivery: {
+        receiver: formData.nome,
+        address: {
+          description: formData.endereco,
+          city: formData.cidade,
+          zipCode: formData.cep,
+          number: Number(formData.numero),
+          complement: formData.complemento
+        }
+      },
+      payment: {
+        card: {
+          name: formData.cardName,
+          number: formData.cardNumber,
+          code: Number(formData.cardCvv),
+          expires: {
+            month: Number(formData.cardMonthExpiry),
+            year: Number(formData.cardYearExpiry)
+          }
+        }
+      }
+    }
+
+    try {
+      await purchase(orderPayload).unwrap()
+      dispatch(clearCart())
+      setCurrentStep('confirmation')
+    } catch (error) {
+      console.error('Erro ao processar o pedido:', error)
+    }
   }
 
   const isFormValid = (fields: FieldName[]): boolean => {
@@ -140,25 +169,30 @@ const CartPopup = ({ fecharCarrinho }: Props) => {
 
   return (
     <>
-      <Overlay onClick={fecharCarrinho} />
-      <CartContainer>
-        <CartHeader>
+      <S.Overlay onClick={fecharCarrinho} />
+      <S.CartContainer>
+        <S.CartHeader>
           <h2>
             {currentStep === 'cart' && ''}
             {currentStep === 'delivery' && 'Entrega'}
             {currentStep === 'payment' &&
               `Pagamento - Valor a pagar R$ ${total.toFixed(2)}`}
-            {currentStep === 'confirmation' && 'Pedido realizado'}
+            {currentStep === 'confirmation' &&
+              `Pedido realizado${
+                isSuccess && purchaseData?.orderId
+                  ? ` - ${purchaseData.orderId}`
+                  : ''
+              }`}
           </h2>
-          <CloseButton onClick={fecharCarrinho}>X</CloseButton>
-        </CartHeader>
+          <S.CloseButton onClick={fecharCarrinho}>X</S.CloseButton>
+        </S.CartHeader>
 
         {currentStep === 'cart' && (
           <>
-            <CartBody>
+            <S.CartBody>
               {cartItems.length > 0 ? (
                 cartItems.map((item) => (
-                  <CartItemCard key={item.id}>
+                  <S.CartItemCard key={item.id}>
                     <img src={item.image} alt={item.title} />
                     <div>
                       <h3>{item.title}</h3>
@@ -167,27 +201,39 @@ const CartPopup = ({ fecharCarrinho }: Props) => {
                         Remover
                       </button>
                     </div>
-                  </CartItemCard>
+                  </S.CartItemCard>
                 ))
               ) : (
                 <p>Seu carrinho está vazio!</p>
               )}
-              <CartFooter>
+              {emptyCartError && (
+                <h3>O carrinho está vazio. Adicione itens para continuar.</h3>
+              )}
+              <S.CartFooter>
                 <div>
                   <h3>Valor total </h3>
                   <h3>R$ {total.toFixed(2)}</h3>
                 </div>
-                <button onClick={() => setCurrentStep('delivery')}>
+                <button
+                  onClick={() => {
+                    if (cartItems.length === 0) {
+                      setEmptyCartError(true)
+                    } else {
+                      setEmptyCartError(false)
+                      setCurrentStep('delivery')
+                    }
+                  }}
+                >
                   Continuar com a entrega
                 </button>
-              </CartFooter>
-            </CartBody>
+              </S.CartFooter>
+            </S.CartBody>
           </>
         )}
 
         {currentStep === 'delivery' && (
-          <CartBody>
-            <FormGroup>
+          <S.CartBody>
+            <S.FormGroup>
               <label htmlFor="nome">Quem irá receber</label>
               <input
                 type="text"
@@ -199,8 +245,8 @@ const CartPopup = ({ fecharCarrinho }: Props) => {
                 required
                 className={errors.nome ? 'has-error' : ''}
               />
-            </FormGroup>
-            <FormGroup>
+            </S.FormGroup>
+            <S.FormGroup>
               <label htmlFor="endereco">Endereço</label>
               <input
                 type="text"
@@ -212,8 +258,8 @@ const CartPopup = ({ fecharCarrinho }: Props) => {
                 required
                 className={errors.endereco ? 'has-error' : ''}
               />
-            </FormGroup>
-            <FormGroup>
+            </S.FormGroup>
+            <S.FormGroup>
               <label htmlFor="cidade">Cidade</label>
               <input
                 type="text"
@@ -225,9 +271,9 @@ const CartPopup = ({ fecharCarrinho }: Props) => {
                 required
                 className={errors.cidade ? 'has-error' : ''}
               />
-            </FormGroup>
-            <Row>
-              <FormGroup>
+            </S.FormGroup>
+            <S.Row>
+              <S.FormGroup>
                 <label htmlFor="cep">CEP</label>
                 <InputMask
                   mask="99999-999"
@@ -239,8 +285,8 @@ const CartPopup = ({ fecharCarrinho }: Props) => {
                   required
                   className={errors.cep ? 'has-error' : ''}
                 />
-              </FormGroup>
-              <FormGroup>
+              </S.FormGroup>
+              <S.FormGroup>
                 <label htmlFor="numero">Número</label>
                 <input
                   type="text"
@@ -252,9 +298,9 @@ const CartPopup = ({ fecharCarrinho }: Props) => {
                   required
                   className={errors.numero ? 'has-error' : ''}
                 />
-              </FormGroup>
-            </Row>
-            <FormGroup>
+              </S.FormGroup>
+            </S.Row>
+            <S.FormGroup>
               <label htmlFor="complemento">Complemento</label>
               <input
                 type="text"
@@ -263,8 +309,8 @@ const CartPopup = ({ fecharCarrinho }: Props) => {
                 value={formData.complemento}
                 onChange={handleChange}
               />
-            </FormGroup>
-            <CartFooter>
+            </S.FormGroup>
+            <S.CartFooter>
               <button
                 onClick={() => {
                   if (
@@ -278,13 +324,13 @@ const CartPopup = ({ fecharCarrinho }: Props) => {
               <button onClick={() => setCurrentStep('cart')}>
                 Voltar ao carrinho
               </button>
-            </CartFooter>
-          </CartBody>
+            </S.CartFooter>
+          </S.CartBody>
         )}
 
         {currentStep === 'payment' && (
-          <CartBody>
-            <FormGroup>
+          <S.CartBody>
+            <S.FormGroup>
               <label htmlFor="cardName">Nome no Cartão</label>
               <input
                 type="text"
@@ -296,9 +342,9 @@ const CartPopup = ({ fecharCarrinho }: Props) => {
                 required
                 className={errors.cardName ? 'has-error' : ''}
               />
-            </FormGroup>
-            <Row>
-              <FormGroup>
+            </S.FormGroup>
+            <S.Row>
+              <S.FormGroup>
                 <label htmlFor="cardNumber">Número do Cartão</label>
                 <InputMask
                   mask="9999 9999 9999 9999"
@@ -310,8 +356,8 @@ const CartPopup = ({ fecharCarrinho }: Props) => {
                   required
                   className={errors.cardNumber ? 'has-error' : ''}
                 />
-              </FormGroup>
-              <FormGroup>
+              </S.FormGroup>
+              <S.FormGroup>
                 <label htmlFor="cardCvv">CVV</label>
                 <InputMask
                   mask="999"
@@ -323,10 +369,10 @@ const CartPopup = ({ fecharCarrinho }: Props) => {
                   required
                   className={errors.cardCvv ? 'has-error' : ''}
                 />
-              </FormGroup>
-            </Row>
-            <Row>
-              <FormGroup>
+              </S.FormGroup>
+            </S.Row>
+            <S.Row>
+              <S.FormGroup>
                 <label htmlFor="cardMonthExpiry">Mês de vencimento</label>
                 <InputMask
                   mask="99"
@@ -338,8 +384,8 @@ const CartPopup = ({ fecharCarrinho }: Props) => {
                   required
                   className={errors.cardMonthExpiry ? 'has-error' : ''}
                 />
-              </FormGroup>
-              <FormGroup>
+              </S.FormGroup>
+              <S.FormGroup>
                 <label htmlFor="cardYearExpiry">Ano de vencimento</label>
                 <InputMask
                   mask="99"
@@ -351,9 +397,9 @@ const CartPopup = ({ fecharCarrinho }: Props) => {
                   required
                   className={errors.cardYearExpiry ? 'has-error' : ''}
                 />
-              </FormGroup>
-            </Row>
-            <CartFooter>
+              </S.FormGroup>
+            </S.Row>
+            <S.CartFooter>
               <button
                 onClick={() => {
                   if (
@@ -373,12 +419,12 @@ const CartPopup = ({ fecharCarrinho }: Props) => {
               <button onClick={() => setCurrentStep('delivery')}>
                 Voltar para edição de endereço
               </button>
-            </CartFooter>
-          </CartBody>
+            </S.CartFooter>
+          </S.CartBody>
         )}
 
         {currentStep === 'confirmation' && (
-          <CartBody>
+          <S.CartBody>
             <p>
               Estamos felizes em informar que seu pedido já está em processo de
               preparação e, em breve, será entregue no endereço fornecido.
@@ -399,12 +445,12 @@ const CartPopup = ({ fecharCarrinho }: Props) => {
               Esperamos que desfrute de uma deliciosa e agradável experiência
               gastronômica. Bom apetite!
             </p>
-            <CartFooter>
+            <S.CartFooter>
               <button onClick={fecharCarrinho}>Concluir</button>
-            </CartFooter>
-          </CartBody>
+            </S.CartFooter>
+          </S.CartBody>
         )}
-      </CartContainer>
+      </S.CartContainer>
     </>
   )
 }

@@ -1,21 +1,10 @@
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { addItem } from '../../store/cart'
-import close from '../../assets/icons/close.png'
 
-import {
-  Card,
-  Titulo,
-  Descricao,
-  Info,
-  Botao,
-  ModalOverlay,
-  ModalContent,
-  ModalImage,
-  ModalInfo,
-  CloseButton,
-  Button
-} from './styles'
+import { addItem } from '../../store/cart'
+
+import * as S from './styles'
+import close from '../../assets/icons/close.png'
 
 type Props = {
   image: string
@@ -39,14 +28,14 @@ const ProductCard = ({ image, title, description, portion, price }: Props) => {
         image,
         title,
         price,
-        quantity: 1
+        portion: 1
       })
     )
   }
 
   return (
     <>
-      <Card>
+      <S.Card>
         <div onClick={openModal} style={{ cursor: 'pointer' }}>
           <img
             src={image}
@@ -54,39 +43,37 @@ const ProductCard = ({ image, title, description, portion, price }: Props) => {
             onError={(e) => (e.currentTarget.src = '/default-image.jpg')}
           />
         </div>
-        <Info>
-          <Titulo>{title}</Titulo>
-        </Info>
-        <Descricao>{description}</Descricao>
-        <Botao onClick={handleAddToCart}>Adicionar ao carrinho</Botao>
-      </Card>
+        <S.Info>
+          <S.Title>{title}</S.Title>
+        </S.Info>
+        <S.Description>{description}</S.Description>
+        <S.Button onClick={handleAddToCart}>Adicionar ao carrinho</S.Button>
+      </S.Card>
 
       {isModalOpen && (
-        <ModalOverlay>
-          <ModalContent>
-            <CloseButton className="close-button" onClick={closeModal}>
+        <S.ModalOverlay>
+          <S.ModalContent>
+            <S.CloseButton className="close-button" onClick={closeModal}>
               <img src={close} alt="close" />
-            </CloseButton>
-            <ModalImage>
+            </S.CloseButton>
+            <S.ModalImage>
               <img
                 src={image}
                 alt={title}
                 onError={(e) => (e.currentTarget.src = '/default-image.jpg')}
               />
-            </ModalImage>
-            <ModalInfo>
+            </S.ModalImage>
+            <S.ModalInfo>
               <h2>{title}</h2>
               <p>{description}</p>
               <br />
-              <p>
-                <strong>Porção:</strong> {portion}
-              </p>
-              <Button onClick={handleAddToCart}>
+              <p>Serve: {portion}</p>
+              <button onClick={handleAddToCart}>
                 Adicionar ao carrinho - R$ {price.toFixed(2)}
-              </Button>
-            </ModalInfo>
-          </ModalContent>
-        </ModalOverlay>
+              </button>
+            </S.ModalInfo>
+          </S.ModalContent>
+        </S.ModalOverlay>
       )}
     </>
   )

@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { cores } from '../../styles/GlobalStyles'
+import { breakpoints, cores } from '../../styles/GlobalStyles'
 
 export const BannerImage = styled.div`
   width: 100%;
@@ -33,5 +33,9 @@ export const BannerContainer = styled.div`
   h2 {
     font-weight: bold;
     margin: 0;
+  }
+
+  @media (max-width: ${breakpoints.tablet}) {
+    padding: 16px;
   }
 `

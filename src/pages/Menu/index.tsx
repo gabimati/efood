@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
+
 import Header from '../../components/Header'
 import Banner from '../../components/Banner'
 import ProductList from '../../components/ProductList'
 import Footer from '../../components/Footer'
+
 import { Restaurant } from '../../types'
 import { GlobalContainer } from '../../styles/GlobalStyles'
 

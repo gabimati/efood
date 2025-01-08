@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react'
-import { List } from './styles'
-import { GlobalContainer } from '../../styles/GlobalStyles'
+
 import RestaurantCard from '../RestaurantCard'
 import { Restaurant } from '../../types'
+
+import { GlobalContainer } from '../../styles/GlobalStyles'
+import { List } from './styles'
 
 const RestaurantsList = () => {
   const [restaurants, setRestaurants] = useState<Restaurant[]>([])
