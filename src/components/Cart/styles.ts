@@ -54,6 +54,7 @@ export const CartItemCard = styled.div`
   background-color: ${cores.begeEscuro};
   color: ${cores.salmao};
   padding: 8px;
+  position: relative;
 
   img {
     width: 80px;
@@ -157,4 +158,18 @@ export const Overlay = styled.div`
   height: 100%;
   background-color: rgba(0, 0, 0, 0.8);
   z-index: 999;
+`
+
+export const RemoveButton = styled.button`
+  position: absolute;
+  bottom: 8px;
+  right: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+
+  img {
+    width: 16px;
+    height: 16px;
+  }
 `

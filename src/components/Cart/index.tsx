@@ -7,6 +7,7 @@ import { RootState } from '../../store'
 import { clearCart, removeItem } from '../../store/cart'
 
 import * as S from './styles'
+import binIcon from '../../assets/icons/bin.png'
 
 type FieldName =
   | 'nome'
@@ -197,10 +198,12 @@ const CartPopup = ({ fecharCarrinho }: Props) => {
                     <div>
                       <h3>{item.title}</h3>
                       <p>R$ {item.price.toFixed(2)}</p>
-                      <button onClick={() => dispatch(removeItem(item.id))}>
-                        Remover
-                      </button>
                     </div>
+                    <S.RemoveButton
+                      onClick={() => dispatch(removeItem(item.id))}
+                    >
+                      <img src={binIcon} alt="Remover" />
+                    </S.RemoveButton>
                   </S.CartItemCard>
                 ))
               ) : (

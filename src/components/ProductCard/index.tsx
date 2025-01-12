@@ -47,7 +47,7 @@ const ProductCard = ({ image, title, description, portion, price }: Props) => {
           <S.Title>{title}</S.Title>
         </S.Info>
         <S.Description>{description}</S.Description>
-        <S.Button onClick={handleAddToCart}>Adicionar ao carrinho</S.Button>
+        <S.Button onClick={openModal}>Adicionar ao carrinho</S.Button>
       </S.Card>
 
       {isModalOpen && (
